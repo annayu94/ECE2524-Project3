@@ -45,3 +45,28 @@ def move(grid, action):
                 # When stop moving
                 break
     return grid, moved, sum
+
+def evaluatoin(grid, num_empty):
+    grid = np.array(grid)
+
+    score = 0
+
+    # Sum of grids
+    sum_grid = np.sum(np.power(grid, 2))
+
+    # monotonicity
+    monotonicity_up = 0
+    monotonicity_right = 0
+    monotonicity_down = 0
+    monotonicity_left = 0
+
+    # smoothness
+    smoothness = 0
+    s_grid = np.sqrt(grid)
+
+    smoothness -= np.sum(np.abs(s_grid[:, 0] - s_grid[:, 1]))
+    smoothness -= np.sum(np.abs(s_grid[:, 1] - s_grid[:, 2]))
+    smoothness -= np.sum(np.abs(s_grid[:, 2] - s_grid[:, 3]))
+    smoothness -= np.sum(np.abs(s_grid[0, :] - s_grid[1, :]))
+    smoothness -= np.sum(np.abs(s_grid[1, :] - s_grid[2, :]))
+    smoothness -= np.sum(np.abs(s_grid[2, :] - s_grid[3, :]))
