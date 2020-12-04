@@ -49,7 +49,7 @@ def move(grid, action):
 def evaluatoin(grid, num_empty):
     grid = np.array(grid)
 
-    score = 0
+    total_score = 0
 
     # Sum of grids
     sum_grid = np.sum(np.power(grid, 2))
@@ -70,3 +70,55 @@ def evaluatoin(grid, num_empty):
     smoothness -= np.sum(np.abs(s_grid[0, :] - s_grid[1, :]))
     smoothness -= np.sum(np.abs(s_grid[1, :] - s_grid[2, :]))
     smoothness -= np.sum(np.abs(s_grid[2, :] - s_grid[3, :]))
+
+    for x in range(4):      # Calculate monotonicity for rows
+        current_row = 0
+        next_row = current_row + 1
+        while next_row < 4:
+            while next_row < 3:
+                next_row += 1
+            current_cell = grid[current_row, x]
+            current_cell_value = current_cell if current_cell else 0
+            next_cell = grid[next_row,x]
+            next_cell_value = next_cell if next_cell else 0
+            if current_cell_value > next_cell_value:
+                monotonicity_up += (next_cell_value - current_cell_value)
+            elif next_cell_value > current_cell_value:
+                monotonicity_down += (current_cell_value - next_cell_value)
+            current_row = next_row
+            next += 1
+
+    for y in range(4):      # Calculate monotonicity for column
+        current_column = 0
+        next_column = current_column + 1
+        while next_column < 4:
+            while next_column < 3:
+                next_column += 1
+            current_cell = grid[y, next_column]
+            current_cell_value = current_cell if current_cell else 0
+            next_cell = grid[y, next_column]
+            next_cell_value = next_cell if next_cell else 0
+            if current_cell_value > next_cell_value:
+                monotonicity_left += (next_cell_value - current_cell_value)
+            elif next_cell_value > current_cell_value:
+                monotonicity_right += (current_cell_value - next_cell_value)
+            current_column = next_column
+            next_column += 1
+
+    monotonocity = max(monotonicity_up, monotonicity_down) + max(monotonicity_right, monotonicity_left)
+
+    # weight for each new_score
+    empty_w = 100000
+    smoothness_w = 3
+    monotonicity_w = 10000
+
+    total_empty = num_empty * empty_w
+    total_smoothness = smoothness * smoothness_w
+    total_monotonicity = monotonicity * monotonicity_w
+
+    total_score += sum_grid
+    total_score += total_empty
+    total_score += total_smoothness
+    total_score += total_monotonicity
+
+    return score
