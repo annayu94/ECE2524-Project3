@@ -122,3 +122,23 @@ def evaluatoin(grid, num_empty):
     total_score += total_monotonicity
 
     return score
+
+def maximize(grid, depth = 0):
+
+    for m in range(4):
+        m_grid = grid.clone()
+        m_grid, moved, _ = move(m_grid, action=action)
+
+        if not moved:
+            continue
+
+        max_score = (float('-inf'), 0, 0, 0)
+        best_direction = None
+
+        new_score = add_new_tile(m_grid, depth + 1)
+
+        if new_score >= max_score:
+            max_score = new_score
+            best_direction = acton
+
+    return max_score, best_direction
