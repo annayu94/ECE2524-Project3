@@ -1,5 +1,6 @@
 import pygame, random, math
 import numpy as np
+from copy import deepcopy
 import _2048
 from _2048.game import Game2048
 from _2048.manager import GameManager
@@ -86,7 +87,7 @@ def evaluatoin(grid, num_empty):
             elif next_cell_value > current_cell_value:
                 monotonicity_down += (current_cell_value - next_cell_value)
             current_row = next_row
-            next += 1
+            next_row += 1
 
     for y in range(4):      # Calculate monotonicity for column
         current_column = 0
@@ -105,7 +106,7 @@ def evaluatoin(grid, num_empty):
             current_column = next_column
             next_column += 1
 
-    monotonocity = max(monotonicity_up, monotonicity_down) + max(monotonicity_right, monotonicity_left)
+    monotonicity = max(monotonicity_up, monotonicity_down) + max(monotonicity_right, monotonicity_left)
 
     # weight for each new_score
     empty_w = 100000
@@ -121,40 +122,40 @@ def evaluatoin(grid, num_empty):
     total_score += total_smoothness
     total_score += total_monotonicity
 
-    return score
+    return total_score
 
 def maximize(grid, depth = 0):
+    max_score = -np.inf
+    best_direction = None
 
     for m in range(4):
-        m_grid = grid.clone()
-        m_grid, moved, _ = move(m_grid, action=action)
+        m_grid = deepcopy(grid)
+        m_grid, moved, _ = move(m_grid, action=m)
 
         if not moved:
             continue
-
-        max_score = (float('-inf'), 0, 0, 0)
-        best_direction = None
 
         new_score = chance(m_grid, depth + 1)
 
         if new_score >= max_score:
             max_score = new_score
-            best_direction = acton
+            best_direction = m
 
     return max_score, best_direction
 
-def change(grid, depth=0):
+def chance(grid, depth=0):
     empty_c = empty_cells(grid)
-    num_empty = lens(empty_c)
+    num_empty = len(empty_c)
 
     if num_empty >= 7 and depth >= 5:
-        return evaluatoin(grid, num_emtpy)
+        return evaluatoin(grid, num_empty)
 
     if num_empty >= 0 and depth >= 5:
         return evaluation(grid, num_empty)
 
     if num_empty == 0:
-        -, max_score = maximize(grid, depth + 1)
+        _, max_score = maximize(grid, depth + 1)
         return max_score
 
     score_sum = 0
+    return score_sum
