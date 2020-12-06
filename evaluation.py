@@ -135,10 +135,26 @@ def maximize(grid, depth = 0):
         max_score = (float('-inf'), 0, 0, 0)
         best_direction = None
 
-        new_score = add_new_tile(m_grid, depth + 1)
+        new_score = chance(m_grid, depth + 1)
 
         if new_score >= max_score:
             max_score = new_score
             best_direction = acton
 
     return max_score, best_direction
+
+def change(grid, depth=0):
+    empty_c = empty_cells(grid)
+    num_empty = lens(empty_c)
+
+    if num_empty >= 7 and depth >= 5:
+        return evaluatoin(grid, num_emtpy)
+
+    if num_empty >= 0 and depth >= 5:
+        return evaluation(grid, num_empty)
+
+    if num_empty == 0:
+        -, max_score = maximize(grid, depth + 1)
+        return max_score
+
+    score_sum = 0
