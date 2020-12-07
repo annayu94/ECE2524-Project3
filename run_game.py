@@ -1,9 +1,12 @@
 import pygame, os, time
 from copy import deepcopy
 import numpy as np
+from pprint import pprint
 import _2048
 from _2048.game import Game2048
 from _2048.manager import GameManager
+
+import evaluation as ev
 
 def run_game(game_class=Game2048, title='2048!', data_dir='save'):
   pygame.init()
@@ -29,11 +32,14 @@ def run_game(game_class=Game2048, title='2048!', data_dir='save'):
       if counter % 5 == 0:
           new_grid = deepcopy(manager.game.grid)
 
-          best_dircection, best_score = ev.maximize(new_grid)
+          best_direction, best_score = ev.maximize(new_grid)
 
           if best_direction is None:
               print('Oooops!!! Maximum number made is %s' % np.max(manager.game.grid))
               break
+
+          e = ev.EVENTS[best_direction]
+          manager.dispatch(e)
 
       for event in pygame.event.get():
           if event.type == pygame.QUIT:
