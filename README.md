@@ -33,3 +33,4 @@ For this progject, maximize algorithm was used as a base algorithm.
   
 ## Huristics
 1. Big
+![Alt text](Image/big.jpg?raw=true)
