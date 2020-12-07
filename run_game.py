@@ -1,4 +1,6 @@
-import pygame, os
+import pygame, os, time
+from copy import deepcopy
+import numpy as np
 import _2048
 from _2048.game import Game2048
 from _2048.manager import GameManager
@@ -17,19 +19,29 @@ def run_game(game_class=Game2048, title='2048!', data_dir='save'):
               os.path.join(data_dir, '2048.%d.state'))
 
   # game loop
+  counter = 0
   running = True
 
   while running:
+      clock.tick(100)
+      counter += 1
 
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT:
-        running = False
-        break
+      if counter % 5 == 0:
+          new_grid = deepcopy(manager.game.grid)
 
-      manager.dispatch(event)
+          best_dircection, best_score = ev.maximize(new_grid)
 
-    manager.draw()
-  # end while
+          if best_direction is None:
+              print('Oooops!!! Maximum number made is %s' % np.max(manager.game.grid))
+              break
+
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              running = False
+          elif event.type == pygame.MOUSEBUTTONUP:
+              manager.dispatch(event)
+
+      manager.draw()
 
   pygame.quit()
   manager.close()
