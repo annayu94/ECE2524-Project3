@@ -161,6 +161,7 @@ def chance(grid, depth = 0):
 
     score_sum = 0
 
+    ## In empty cells, put tile 2 or 4 and calulate the performance of board
     for x, y in empty_c:
         for i in [2, 4]:
             i_grid = deepcopy(grid)
