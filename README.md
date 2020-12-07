@@ -32,4 +32,8 @@ For this progject, maximize algorithm was used as a base algorithm.
   * A tile with a number **4** is created with 10%
   
 ## Huristics
-1. Big
+1. Big<br/>
+
+![Alt text](Image/big.jpg?raw=true)
+
+Next move should make a big number. For example, moving left or right (4096 + 4096) is better than moving up and down (4 + 4)
