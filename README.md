@@ -10,8 +10,7 @@ For this progject, maximize algorithm was used as a base algorithm.
 ``` 
   python3 -m pip install 2048
 ```  
-1. Download and install Xming utility for graphical environment
-  - https://sourceforge.net/projects/xming/
+1. Download and install Xming utility for graphical environment(https://sourceforge.net/projects/xming/)
 2. Launch Xming
 3. Run the following commands to activate
 ```
@@ -31,3 +30,6 @@ For this progject, maximize algorithm was used as a base algorithm.
 * Every time the board is moved, a new tile is created
   * A tile with a number **2** is created with 90%
   * A tile with a number **4** is created with 10%
+  
+## Huristics
+1. Big
