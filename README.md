@@ -23,3 +23,11 @@ For this progject, maximize algorithm was used as a base algorithm.
 ```  
   python3 run_game.py
 ```
+
+## 2048 Game Rules
+* Board can be moved in four directions: UP, RIGHT, DOWN, LEFT
+* All tile moves to the direction where board is moved
+* If there is a tile with the same number in moved direction, it can be merged (example: 4 + 4 = 8)
+* Every time the board is moved, a new tile is created
+  * A tile with a number **2** is created with 90%
+  * A tile with a number **4** is created with 10%
