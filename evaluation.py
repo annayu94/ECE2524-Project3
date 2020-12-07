@@ -24,9 +24,12 @@ GET_DELTAS = [ lambda row, column: ((i, column) for i in range(row + 1, 4)),    
 
 # Calculate empty cells
 def empty_cells(grid):
-    return [(x, y) for x in range(4) for y in range(4) if not grid[y][x]]
+    for x in range(4):
+        for y in range(4):
+            if not grid[y][x]:
+                return [(x, y)]
 
-def move(grid, action):
+def movement(grid, action):
     moved = 0
     sum = 0
     for row, column in CELLS[action]:
@@ -42,12 +45,12 @@ def move(grid, action):
                     grid[row][column] *= 2
                     grid[delta_r][delta_c] = 0
                     sum += grid[row][column]
-                    moved+=1
+                    moved += 1
                 # When stop moving
                 break
     return grid, moved, sum
 
-def evaluatoin(grid, num_empty):
+def evaluation(grid, num_empty):
     grid = np.array(grid)
 
     total_score = 0
@@ -114,7 +117,7 @@ def evaluatoin(grid, num_empty):
     monotonicity_w = 10000
 
     total_empty = num_empty * empty_w
-    total_smoothness = smoothness * smoothness_w
+    total_smoothness = smoothness ** smoothness_w
     total_monotonicity = monotonicity * monotonicity_w
 
     total_score += sum_grid
@@ -130,7 +133,7 @@ def maximize(grid, depth = 0):
 
     for m in range(4):
         m_grid = deepcopy(grid)
-        m_grid, moved, _ = move(m_grid, action=m)
+        m_grid, moved, _ = movement(m_grid, action=m)
 
         if not moved:
             continue
@@ -141,14 +144,14 @@ def maximize(grid, depth = 0):
             max_score = new_score
             best_direction = m
 
-    return max_score, best_direction
+    return best_direction, max_score
 
-def chance(grid, depth=0):
+def chance(grid, depth = 0):
     empty_c = empty_cells(grid)
     num_empty = len(empty_c)
 
-    if num_empty >= 7 and depth >= 5:
-        return evaluatoin(grid, num_empty)
+    if num_empty >= 6 and depth >= 3:
+        return evaluation(grid, num_empty)
 
     if num_empty >= 0 and depth >= 5:
         return evaluation(grid, num_empty)
@@ -158,4 +161,21 @@ def chance(grid, depth=0):
         return max_score
 
     score_sum = 0
+
+    score_1 = (0.9 * (1 / num_empty))
+    score_2 = (0.1 * (1 / num_empty))
+
+    for x, y in empty_c:
+        for i in [2, 4]:
+            i_grid = deepcopy(grid)
+            i_grid[y][x] = i
+
+            _, max_score = maximize(i_grid, depth + 1)
+
+            if i == 2:
+                max_score *= score_1
+            else:
+                max_score *= score_2
+
+        score_sum += max_score
     return score_sum
